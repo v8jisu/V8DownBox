@@ -1,8 +1,15 @@
 # V8 Download Box
 
+![License](https://img.shields.io/badge/License-GPL--2.0--or--later-blue)
+![Version](https://img.shields.io/badge/Version-1.4.1-green)
+![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-21759B)
+![PHP](https://img.shields.io/badge/PHP-7.0%2B-777BB4)
+
 资源下载类博客的 WordPress 下载信息框插件：在文章底部渲染统一风格的下载信息框，
 支持 10 种网盘/下载通道、回复可见、需登录下载、下载次数统计、底部悬浮条与侧栏小组件。
 
+**English**: A download-info box plugin for resource blogs — 10 net-disk channels,
+comment-gated downloads, anti-refresh counter, sticky bar & sidebar widget.
 
 ## 功能
 
@@ -20,17 +27,30 @@
 
 ## 安装
 
+**方式一：git**
+
 ```bash
 cd wp-content/plugins
 git clone https://github.com/v8jisu/V8DownBox.git v8jisu-download-box
 ```
 
-或在仓库页 Download ZIP 后，后台「插件 → 安装插件 → 上传插件」。
+**方式二：Release zip**
+
+到 [Releases](https://github.com/v8jisu/V8DownBox/releases) 下载
+`v8jisu-download-box-x.x.x.zip`，后台「插件 → 安装插件 → 上传插件」。
+
+**方式三：GitHub Download ZIP**
+
+仓库页 Code → Download ZIP，解压出的目录整个放到 `wp-content/plugins/`。
 
 激活后：
 
 1. **设置 → V8 Download Box** 完成全站配置
 2. 文章编辑页会出现「下载设置」面板，按文章填写各通道链接
+
+### 更新
+
+用新版本目录覆盖原目录即可，文章数据与配置不受影响。
 
 ## 使用
 
@@ -95,12 +115,37 @@ v8jisu-download-box/
 
 ## 相对旧版的重写要点
 
-- 渲染模板全部 return 字符串，不再使用 `ob_start`——旧版在 `the_content` 过滤器中调用
+- 渲染模板全部 return 字符串，不再使用 `ob_start`——在 `the_content` 过滤器中调用
   `ob_start`，在页面缓存等输出缓冲回调里执行会触发 PHP Fatal error
   （`Cannot use output buffering in output buffering display handlers`），导致文章页白屏
-- 评论门校验改用 `$wpdb->prepare`（旧版把 cookie 值直接拼进 SQL）
+- 评论门校验改用 `$wpdb->prepare`（cookie 值不直接拼进 SQL）
 - 元数据面板加 nonce；设置保存白名单化 sanitize；前端弹窗 url/密码输出转义；
   模板加 ABSPATH 守卫；下载计数防刷新
+
+## 常见问题
+
+**Q: 任何主题都能用吗？**
+
+可以。三个前台模块都是标准 `the_content` 过滤器 / `wp_footer` / WP_Widget 挂载，
+不依赖特定主题；个别主题样式冲突时在主题 CSS 里微调即可。
+
+**Q: 和页面缓存 / CDN 兼容吗？**
+
+兼容。渲染全程 return 字符串、无输出缓冲，页面缓存（fastcgi_cache / CDN）下工作正常；
+紧急暂停时 AJAX 返回明确 code 4，让拿着旧缓存页面的访客也看到"维护中"而不是报错。
+
+**Q: 如何自定义外观？**
+
+`templates/` 与 `assets/` 均可直接改；下载框结构由 `templates/box.php` 输出，
+配合主题 CSS 覆盖即可，无需动主逻辑。
+
+**Q: 下载次数会被恶意刷吗？**
+
+AJAX 侧有防刷新控制，正常博客量级足够；如需更严格可再加主题层验证。
+
+**Q: PHP 8 能用吗？**
+
+代码为经典 PHP 风格，生产实测于 PHP 7.4；PHP 8.x 如遇兼容问题欢迎提 Issue。
 
 ## 版本历史（摘要，详见主文件头注释）
 
@@ -110,6 +155,10 @@ v8jisu-download-box/
 - **1.3.0** 新增蓝奏云/阿里云盘/夸克/天翼/123 五通道；插件更名 V8 Download Box
 - **1.2.0** 紧急暂停总闸 + 三模块独立开关
 - **1.1.0** 安全加固：评论门双匹配、AJAX 校验、防刷计数、nonce、sanitize、ABSPATH、转义
+
+## 反馈与贡献
+
+Issue / PR 欢迎：[Issues](https://github.com/v8jisu/V8DownBox/issues)
 
 ## License
 
