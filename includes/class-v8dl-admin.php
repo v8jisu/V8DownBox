@@ -23,6 +23,23 @@ class V8DL_Admin {
 		'wb_down_url_xunlei',  // 迅雷链接
 	);
 
+	/**
+	 * 链接类字段的协议白名单（纵深防御：拒绝 javascript: 等伪协议入库，
+	 * 避免其经前台 window.open / <a href> 原样输出）。
+	 */
+	public static $scheme_whitelist = array(
+		'wb_down_local_url'  => array( 'http', 'https' ),
+		'wb_down_url'        => array( 'http', 'https' ),
+		'wb_down_url_lanzou' => array( 'http', 'https' ),
+		'wb_down_url_ali'    => array( 'http', 'https' ),
+		'wb_down_url_quark'  => array( 'http', 'https' ),
+		'wb_down_url_tianyi' => array( 'http', 'https' ),
+		'wb_down_url_123pan' => array( 'http', 'https' ),
+		'wb_down_url_ct'     => array( 'http', 'https' ),
+		'wb_down_url_magnet' => array( 'magnet' ),
+		'wb_down_url_xunlei' => array( 'thunder' ),
+	);
+
 	public function __construct() {
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -233,6 +250,15 @@ class V8DL_Admin {
 				continue;
 			}
 			$value = sanitize_text_field( trim( wp_unslash( $_POST[ $field ] ) ) );
+
+			// 链接类字段按协议白名单校验，非法协议清空（留空与 / 开头的站点相对路径不受影响）。
+			if ( isset( self::$scheme_whitelist[ $field ] ) && '' !== $value && '/' !== substr( $value, 0, 1 ) ) {
+				$scheme = strtolower( (string) parse_url( $value, PHP_URL_SCHEME ) );
+				if ( ! in_array( $scheme, self::$scheme_whitelist[ $field ], true ) ) {
+					$value = '';
+				}
+			}
+
 			update_post_meta( $post_id, $field, $value );
 		}
 	}

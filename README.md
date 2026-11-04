@@ -1,7 +1,7 @@
 # V8 Download Box
 
 ![License](https://img.shields.io/badge/License-GPL--2.0--or--later-blue)
-![Version](https://img.shields.io/badge/Version-1.4.1-green)
+![Version](https://img.shields.io/badge/Version-1.4.2-green)
 ![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-21759B)
 ![PHP](https://img.shields.io/badge/PHP-7.0%2B-777BB4)
 
@@ -141,7 +141,7 @@ v8jisu-download-box/
 
 **Q: 下载次数会被恶意刷吗？**
 
-AJAX 侧有防刷新控制，正常博客量级足够；如需更严格可再加主题层验证。
+服务端有 60 秒同源同文去重计数，失败请求不计数，正常博客量级足够；如需更严格可再加主题层验证。
 
 **Q: PHP 8 能用吗？**
 
@@ -149,6 +149,7 @@ AJAX 侧有防刷新控制，正常博客量级足够；如需更严格可再加
 
 ## 版本历史（摘要，详见主文件头注释）
 
+- **1.4.2** 安全加固：AJAX 校验文章发布状态、计数 60 秒防刷、链接协议白名单
 - **1.4.1** 无任何链接的文章不渲染任何下载模块；侧栏组件仅在文章页显示
 - **1.4.0** 下载次数移至下载框标题栏（点击实时 +1），侧栏不再重复展示
 - **1.3.1** 侧栏组件改用 WP_Widget 标准注册

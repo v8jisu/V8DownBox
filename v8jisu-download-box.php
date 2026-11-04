@@ -2,7 +2,7 @@
 /**
  * Plugin Name: V8 Download Box
  * Description: 资源下载类博客的下载信息框：本地/百度网盘/蓝奏云/阿里云盘/夸克网盘/天翼云盘/123云盘/城通网盘/磁力/迅雷多通道下载，支持回复后下载；数据兼容同类旧版下载框插件（wb_* 元数据零迁移）。
- * Version:     1.4.1
+ * Version:     1.4.2
  * Author:      v8jisu
  * License:     GPL-2.0-or-later
  *
@@ -35,6 +35,10 @@
  * 1.4.1 未填写任何网盘链接的文章不渲染任何下载模块（下载框/侧栏组件/悬浮条
  * 统一由 has_links() 把关）；侧栏组件仅在文章页显示。
  *
+ * 1.4.2 安全加固：AJAX 取链前校验文章发布状态（草稿/待审/私密文章的网盘链接
+ * 不再可被枚举读取）；下载计数加服务端 60 秒轻量防刷（同源同文只计一次）；
+ * 链接字段保存按协议白名单校验（拒绝 javascript: 等伪协议）。
+
  * 版本策略：日常小修只在本 changelog 记录、不升版本号；功能发布或前端资源
  * （js/css/图标）变更时统一升版本——升级同时用于刷新访客端的资源缓存。
  */
@@ -45,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'V8DL_PATH', dirname( __FILE__ ) );
 define( 'V8DL_BASE_FILE', __FILE__ );
-define( 'V8DL_VER', '1.4.1' );
+define( 'V8DL_VER', '1.4.2' );
 
 require_once V8DL_PATH . '/includes/class-v8dl-admin.php';
 require_once V8DL_PATH . '/includes/class-v8dl-front.php';

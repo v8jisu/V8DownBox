@@ -44,8 +44,8 @@ class V8DL_Front {
 		if ( ! is_singular( 'post' ) || ! is_main_query() ) {
 			return $content;
 		}
-		// 摘要/第三方过滤器场景不追加（沿用旧插件的白名单）。
-		if ( doing_filter( 'get_the_excerpt' ) || doing_filter( 'the_excerpt' ) || doing_filter( 'wpjam_html' ) ) {
+		// 摘要渲染场景不追加（get_the_excerpt 会在无主循环上下文触发 the_content）。
+		if ( doing_filter( 'get_the_excerpt' ) || doing_filter( 'the_excerpt' ) ) {
 			return $content;
 		}
 
@@ -320,6 +320,13 @@ class V8DL_Front {
 				break;
 			}
 
+			// 只对已发布的文章提供取链：草稿/待审/私密文章的网盘链接不对外泄露。
+			$post = get_post( $post_id );
+			if ( ! $post || 'publish' !== $post->post_status || 'post' !== $post->post_type ) {
+				$ret['code'] = 1;
+				break;
+			}
+
 			if ( ! $post_id || ! isset( $channels[ $rid ] ) ) {
 				$ret['code'] = 1;
 				break;
@@ -350,10 +357,16 @@ class V8DL_Front {
 				$ret['data']['pwd'] = $meta['wb_down_pwd'];
 			}
 
-			// 下载计数，沿用旧键名 post_downs。
+			// 下载计数，沿用旧键名 post_downs。服务端轻量防刷：
+			// 同一来源 60 秒内对同一文章的重复取链只计一次（取链本身不受影响）。
+			$ip    = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) : '';
+			$tkey  = 'v8dl_cnt_' . md5( $post_id . '|' . $ip );
 			$count = (int) get_post_meta( $post_id, 'post_downs', true );
-			$count += 1;
-			update_post_meta( $post_id, 'post_downs', $count );
+			if ( ! get_transient( $tkey ) ) {
+				set_transient( $tkey, 1, 60 );
+				$count += 1;
+				update_post_meta( $post_id, 'post_downs', $count );
+			}
 			$ret['data']['post_downs'] = $count;
 		} while ( false );
 
@@ -361,7 +374,8 @@ class V8DL_Front {
 	}
 
 	/**
-	 * 侧栏下载信息 widget。沿用旧 id_base，保证站点已添加的侧栏组件继续生效。
+	 * 侧栏下载信息 widget。id_base 为独立命名（v8dl-download-info），
+	 * 从旧版下载框插件切换时需在小工具页重新添加一次。
 	 * 1.3.1 起改用 WP_Widget 类注册：WP 5.8+ 的区块小工具编辑器不显示
 	 * 老式 wp_register_sidebar_widget 注册的 PHP 组件，导致后台找不到。
 	 */
@@ -426,7 +440,7 @@ class V8DL_Front {
 
 /**
  * 侧栏"下载信息"组件（WP_Widget 标准注册，兼容 WP 5.8+ 区块小工具编辑器）。
- * id_base 沿用旧版命名（保证已有侧栏组件配置无缝接管），外观与老式渲染一致。
+ * id_base 为独立命名（v8dl-download-info），外观与老式渲染一致。
  */
 class V8DL_Widget extends WP_Widget {
 
