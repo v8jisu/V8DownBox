@@ -70,6 +70,7 @@ class V8DL_Admin {
 					'sticky_mode'    => 0,
 					'btn_align'      => 0,
 					'remark'         => '',
+'post_types'     => array( 'post' ),
 				)
 			);
 		}
@@ -98,7 +99,34 @@ class V8DL_Admin {
 		return $values;
 	}
 
+	/**
+	 * 生效文章类型：设置页可配置（默认仅 post）。取链门禁与前台挂载都以此为准。
+	 */
+	public static function post_types() {
+		$types = self::cnf( 'post_types' );
+		if ( ! is_array( $types ) || empty( $types ) ) {
+			$types = array( 'post' );
+		}
+		return array_values( $types );
+	}
+
+	/**
+	 * 设置页可勾选的公开内容类型列表。
+	 */
+	public static function post_type_options() {
+		$types = get_post_types( array( 'public' => true ), 'objects' );
+		$out   = array();
+		foreach ( $types as $type ) {
+			if ( 'attachment' === $type->name ) {
+				continue;
+			}
+			$out[ $type->name ] = ! empty( $type->labels->name ) ? $type->labels->name : $type->name;
+		}
+		return $out;
+	}
+
 	public function admin_menu() {
+
 		add_options_page(
 			'V8 Download Box Settings',
 			'V8 Download Box',
@@ -126,7 +154,17 @@ class V8DL_Admin {
 		// btn_align 不在设置表单里，未提交时保留旧值，避免保存设置把它重置。
 		$btn_align = isset( $input['btn_align'] ) ? (int) (bool) $input['btn_align'] : (int) ! empty( $old['btn_align'] );
 
-		return array(
+			// 生效文章类型：只允许公开类型；全不选时回退默认（post）。
+	$available  = array_diff( get_post_types( array( 'public' => true ), 'names' ), array( 'attachment' ) );
+	$post_types = ( isset( $input['post_types'] ) && is_array( $input['post_types'] ) )
+		? array_values( array_intersect( $input['post_types'], $available ) )
+		: array();
+	if ( empty( $post_types ) ) {
+		$post_types = array( 'post' );
+	}
+
+	return array(
+
 			'switch'         => empty( $input['switch'] ) ? 0 : 1,
 			'pause_all'      => empty( $input['pause_all'] ) ? 0 : 1,
 			'box_enabled'    => empty( $input['box_enabled'] ) ? 0 : 1,
@@ -138,6 +176,7 @@ class V8DL_Admin {
 			'sticky_mode'    => ( isset( $input['sticky_mode'] ) && in_array( (int) $input['sticky_mode'], array( 0, 1, 2 ), true ) ) ? (int) $input['sticky_mode'] : 0,
 			'btn_align'      => $btn_align,
 			'remark'         => isset( $input['remark'] ) ? sanitize_text_field( $input['remark'] ) : '',
+'post_types'     => $post_types,
 		);
 	}
 
@@ -153,55 +192,65 @@ class V8DL_Admin {
 				<?php settings_fields( self::$option_name ); ?>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row">启用下载功能</th>
+						<th scope="row"><?php echo esc_html__( '启用下载功能', 'v8-download-box' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[switch]" value="1" <?php checked( $opt['switch'] ); ?>> 在文章底部追加下载信息框</label>
+							<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[switch]" value="1" <?php checked( $opt['switch'] ); ?>> <?php echo esc_html__( '在文章底部追加下载信息框', 'v8-download-box' ); ?></label>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row">紧急暂停</th>
+						<th scope="row"><?php echo esc_html__( '紧急暂停', 'v8-download-box' ); ?></th>
 						<td>
-							<label style="color:#b32d2e;"><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[pause_all]" value="1" <?php checked( $opt['pause_all'] ); ?>> <strong>一键暂停全站下载</strong>（前台显示“维护中”，AJAX 拒绝取链；文章数据与配置不受影响，取消勾选即恢复）</label>
+							<label style="color:#b32d2e;"><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[pause_all]" value="1" <?php checked( $opt['pause_all'] ); ?>> <strong><?php echo esc_html__( '一键暂停全站下载', 'v8-download-box' ); ?></strong><?php echo esc_html__( '（前台显示“维护中”，AJAX 拒绝取链；文章数据与配置不受影响，取消勾选即恢复）', 'v8-download-box' ); ?></label>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row">模块开关</th>
+						<th scope="row"><?php echo esc_html__( '模块开关', 'v8-download-box' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[box_enabled]" value="1" <?php checked( $opt['box_enabled'] ); ?>> 文章底部下载框</label>&nbsp;&nbsp;
-							<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[sticky_enabled]" value="1" <?php checked( $opt['sticky_enabled'] ); ?>> 悬浮下载条</label>&nbsp;&nbsp;
-							<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[widget_enabled]" value="1" <?php checked( $opt['widget_enabled'] ); ?>> 侧栏下载信息</label>
-							<p class="description">分别控制三个前台模块的显示，互不影响；紧急暂停时全部隐藏。</p>
+							<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[box_enabled]" value="1" <?php checked( $opt['box_enabled'] ); ?>> <?php echo esc_html__( '文章底部下载框', 'v8-download-box' ); ?></label>&nbsp;&nbsp;
+							<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[sticky_enabled]" value="1" <?php checked( $opt['sticky_enabled'] ); ?>> <?php echo esc_html__( '悬浮下载条', 'v8-download-box' ); ?></label>&nbsp;&nbsp;
+							<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[widget_enabled]" value="1" <?php checked( $opt['widget_enabled'] ); ?>> <?php echo esc_html__( '侧栏下载信息', 'v8-download-box' ); ?></label>
+							<p class="description"><?php echo esc_html__( '分别控制三个前台模块的显示，互不影响；紧急暂停时全部隐藏。', 'v8-download-box' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row">需登录后下载</th>
-						<td><label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[need_member]" value="1" <?php checked( $opt['need_member'] ); ?>> 未登录访客点击下载时提示先登录</label></td>
+						<th scope="row"><?php echo esc_html__( '需登录后下载', 'v8-download-box' ); ?></th>
+						<td><label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[need_member]" value="1" <?php checked( $opt['need_member'] ); ?>> <?php echo esc_html__( '未登录访客点击下载时提示先登录', 'v8-download-box' ); ?></label></td>
 					</tr>
 					<tr>
-						<th scope="row">需回复后下载</th>
-						<td><label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[need_comment]" value="1" <?php checked( $opt['need_comment'] ); ?>> 全站生效；单篇文章可在编辑页单独设置"回复后下载"</label></td>
+						<th scope="row"><?php echo esc_html__( '需回复后下载', 'v8-download-box' ); ?></th>
+						<td><label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[need_comment]" value="1" <?php checked( $opt['need_comment'] ); ?>> <?php echo esc_html__( '全站生效；单篇文章可在编辑页单独设置"回复后下载"', 'v8-download-box' ); ?></label></td>
 					</tr>
 					<tr>
-						<th scope="row">显示下载次数</th>
-						<td><label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[display_count]" value="1" <?php checked( $opt['display_count'] ); ?>> 在文章底部下载框标题栏显示累计下载次数（点击下载后实时 +1）</label></td>
+						<th scope="row"><?php echo esc_html__( '显示下载次数', 'v8-download-box' ); ?></th>
+						<td><label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[display_count]" value="1" <?php checked( $opt['display_count'] ); ?>> <?php echo esc_html__( '在文章底部下载框标题栏显示累计下载次数（点击下载后实时 +1）', 'v8-download-box' ); ?></label></td>
 					</tr>
 					<tr>
-						<th scope="row">底部悬浮条</th>
+						<th scope="row"><?php echo esc_html__( '底部悬浮条', 'v8-download-box' ); ?></th>
 						<td>
-							<label><input type="radio" name="<?php echo esc_attr( self::$option_name ); ?>[sticky_mode]" value="0" <?php checked( $opt['sticky_mode'], 0 ); ?>> 关闭</label>
-							<label><input type="radio" name="<?php echo esc_attr( self::$option_name ); ?>[sticky_mode]" value="1" <?php checked( $opt['sticky_mode'], 1 ); ?>> 页面顶部</label>
-							<label><input type="radio" name="<?php echo esc_attr( self::$option_name ); ?>[sticky_mode]" value="2" <?php checked( $opt['sticky_mode'], 2 ); ?>> 吸附底部</label>
+							<label><input type="radio" name="<?php echo esc_attr( self::$option_name ); ?>[sticky_mode]" value="0" <?php checked( $opt['sticky_mode'], 0 ); ?>> <?php echo esc_html__( '关闭', 'v8-download-box' ); ?></label>
+							<label><input type="radio" name="<?php echo esc_attr( self::$option_name ); ?>[sticky_mode]" value="1" <?php checked( $opt['sticky_mode'], 1 ); ?>> <?php echo esc_html__( '页面顶部', 'v8-download-box' ); ?></label>
+							<label><input type="radio" name="<?php echo esc_attr( self::$option_name ); ?>[sticky_mode]" value="2" <?php checked( $opt['sticky_mode'], 2 ); ?>> <?php echo esc_html__( '吸附底部', 'v8-download-box' ); ?></label>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row">版权说明</th>
+						<th scope="row"><?php echo esc_html__( '版权说明', 'v8-download-box' ); ?></th>
 						<td>
 							<input type="text" class="regular-text" name="<?php echo esc_attr( self::$option_name ); ?>[remark]" value="<?php echo esc_attr( $opt['remark'] ); ?>">
-							<p class="description">留空则显示默认文案。</p>
+							<p class="description"><?php echo esc_html__( '留空则显示默认文案。', 'v8-download-box' ); ?></p>
 						</td>
 					</tr>
-				</table>
-				<?php submit_button( '保存设置' ); ?>
+				<tr>
+	<th scope="row"><?php echo esc_html__( '生效文章类型', 'v8-download-box' ); ?></th>
+	<td>
+	<?php foreach ( self::post_type_options() as $pt => $pt_label ) : ?>
+	<label><input type="checkbox" name="<?php echo esc_attr( self::$option_name ); ?>[post_types][]" value="<?php echo esc_attr( $pt ); ?>" <?php checked( in_array( $pt, (array) $opt['post_types'], true ) ); ?>> <?php echo esc_html( $pt_label ); ?></label>&nbsp;&nbsp;
+	<?php endforeach; ?>
+	<p class="description"><?php echo esc_html__( '勾选启用下载功能的内容类型（下载框自动追加、取链门禁同步生效），全不选时恢复默认（仅文章）；[v8dl_box] 短代码可用于任何内容。', 'v8-download-box' ); ?></p>
+	</td>
+	</tr>
+	</table>
+
+				<?php submit_button( __( '保存设置', 'v8-download-box' ) ); ?>
 			</form>
 		</div>
 		<?php
@@ -210,7 +259,7 @@ class V8DL_Admin {
 	public function add_meta_box() {
 		add_meta_box(
 			'v8dl_meta_box',
-			'下载设置',
+			__( '下载设置', 'v8-download-box' ),
 			array( $this, 'render_meta_box' ),
 			'post',
 			'normal',

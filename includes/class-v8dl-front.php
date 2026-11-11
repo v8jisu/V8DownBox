@@ -32,6 +32,9 @@ class V8DL_Front {
 			}
 		}
 
+		// [v8dl_box] 短代码：总开关关闭时输出空，注册保持无感。
+		add_shortcode( 'v8dl_box', array( __CLASS__, 'shortcode_box' ) );
+
 		// 兼容旧插件的自定义渲染过滤器。
 		add_filter( 'wb_dlip_html', array( __CLASS__, 'down_html' ) );
 	}
@@ -41,7 +44,7 @@ class V8DL_Front {
 	}
 
 	public function append_box( $content ) {
-		if ( ! is_singular( 'post' ) || ! is_main_query() ) {
+		if ( ! is_singular( V8DL_Admin::post_types() ) || ! is_main_query() ) {
 			return $content;
 		}
 		// 摘要渲染场景不追加（get_the_excerpt 会在无主循环上下文触发 the_content）。
@@ -88,70 +91,70 @@ class V8DL_Front {
 		$dl_info = array();
 		if ( $meta['wb_down_local_url'] ) {
 			$dl_info['local'] = array(
-				'name' => '本地直接下载',
+				'name' => __( '本地直接下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_local_url'],
 				'psw'  => '',
 			);
 		}
 		if ( $meta['wb_down_url'] ) {
 			$dl_info['baidu'] = array(
-				'name' => '百度网盘下载',
+				'name' => __( '百度网盘下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url'],
 				'psw'  => $meta['wb_down_pwd'],
 			);
 		}
 		if ( $meta['wb_down_url_lanzou'] ) {
 			$dl_info['lanzou'] = array(
-				'name' => '蓝奏云下载',
+				'name' => __( '蓝奏云下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url_lanzou'],
 				'psw'  => '',
 			);
 		}
 		if ( $meta['wb_down_url_ali'] ) {
 			$dl_info['ali'] = array(
-				'name' => '阿里云盘下载',
+				'name' => __( '阿里云盘下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url_ali'],
 				'psw'  => '',
 			);
 		}
 		if ( $meta['wb_down_url_quark'] ) {
 			$dl_info['quark'] = array(
-				'name' => '夸克网盘下载',
+				'name' => __( '夸克网盘下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url_quark'],
 				'psw'  => '',
 			);
 		}
 		if ( $meta['wb_down_url_tianyi'] ) {
 			$dl_info['tianyi'] = array(
-				'name' => '天翼云盘下载',
+				'name' => __( '天翼云盘下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url_tianyi'],
 				'psw'  => '',
 			);
 		}
 		if ( $meta['wb_down_url_123pan'] ) {
 			$dl_info['pan123'] = array(
-				'name' => '123云盘下载',
+				'name' => __( '123云盘下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url_123pan'],
 				'psw'  => '',
 			);
 		}
 		if ( $meta['wb_down_url_ct'] ) {
 			$dl_info['ct'] = array(
-				'name' => '城通网盘下载',
+				'name' => __( '城通网盘下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url_ct'],
 				'psw'  => '',
 			);
 		}
 		if ( $meta['wb_down_url_magnet'] ) {
 			$dl_info['magnet'] = array(
-				'name' => '磁力链接',
+				'name' => __( '磁力链接', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url_magnet'],
 				'psw'  => '',
 			);
 		}
 		if ( $meta['wb_down_url_xunlei'] ) {
 			$dl_info['xunlei'] = array(
-				'name' => '迅雷下载',
+				'name' => __( '迅雷下载', 'v8-download-box' ),
 				'url'  => $meta['wb_down_url_xunlei'],
 				'psw'  => '',
 			);
@@ -227,52 +230,115 @@ class V8DL_Front {
 	}
 
 	public function enqueue() {
-		// wp_head 阶段主循环尚未开始，get_the_ID() 可能为空，必须用查询对象取 ID。
-		$post_id = get_queried_object_id();
-		if ( ! $post_id || ! is_singular( 'post' ) ) {
-			return;
-		}
-
-		$meta = V8DL_Admin::meta_values( $post_id );
-		if ( ! $meta['wb_dl_type'] ) {
-			return;
-		}
-
-		if ( ! wp_script_is( 'jquery', 'enqueued' ) ) {
-			wp_enqueue_script( 'jquery' );
-		}
-
-		// wbui 为内置 UI 样式库，若其他插件已加载同名资源则复用。
-		if ( ! wp_style_is( 'wbui-css', 'registered' ) ) {
-			wp_enqueue_style( 'wbui-css', plugin_dir_url( V8DL_BASE_FILE ) . 'assets/wbui/assets/wbui.css', array(), V8DL_VER );
-			wp_enqueue_script( 'wbui-js', plugin_dir_url( V8DL_BASE_FILE ) . 'assets/wbui/wbui.js', array(), V8DL_VER, true );
-		}
-
-		wp_enqueue_style( 'v8dl-front', plugin_dir_url( V8DL_BASE_FILE ) . 'assets/wbp_dlipp.css', array(), V8DL_VER );
-		wp_enqueue_script( 'v8dl-front', plugin_dir_url( V8DL_BASE_FILE ) . 'assets/v8dl-front.js', array( 'jquery' ), V8DL_VER, true );
-
-		$config = 'var v8dl_config = ' . wp_json_encode(
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'pid'      => (int) $post_id,
-				'dir'      => plugin_dir_url( V8DL_BASE_FILE ),
-				'ver'      => V8DL_VER,
-			)
-		) . ';';
-		wp_add_inline_script( 'v8dl-front', $config, 'before' );
-
 		$opt = V8DL_Admin::cnf();
+		if ( empty( $opt['switch'] ) || is_feed() ) {
+			return;
+		}
 
-		// 回复后下载：提交评论时强制写入评论者 cookie，访客评论后即可直接下载。
-		$need_comment = ( '1' === (string) $meta['wb_dl_mode'] ) || ! empty( $opt['need_comment'] );
-		if ( $need_comment ) {
-			add_filter( 'comment_form_field_cookies', '__return_false' );
-			add_action( 'set_comment_cookies', array( __CLASS__, 'force_comment_cookies' ), 10, 3 );
+		// 样式必须赶在 wp_head 之前排队：总开关开启即全站加载（体积小），
+		// 保证 [v8dl_box] 短代码在任何位置渲染时都有样式可用。
+		wp_enqueue_style( 'v8dl-front', plugin_dir_url( V8DL_BASE_FILE ) . 'assets/wbp_dlipp.css', array(), V8DL_VER );
+
+		$post_id = get_queried_object_id();
+		if ( $post_id && is_singular( V8DL_Admin::post_types() ) ) {
+			$meta = V8DL_Admin::meta_values( $post_id );
+			if ( $meta['wb_dl_type'] ) {
+				self::enqueue_assets( $post_id );
+
+				// 回复后下载：提交评论时强制写入评论者 cookie，访客评论后即可直接下载。
+				$need_comment = ( '1' === (string) $meta['wb_dl_mode'] ) || ! empty( $opt['need_comment'] );
+				if ( $need_comment ) {
+					add_filter( 'comment_form_field_cookies', '__return_false' );
+					add_action( 'set_comment_cookies', array( __CLASS__, 'force_comment_cookies' ), 10, 3 );
+				}
+			}
 		}
 
 		if ( 2 === (int) $opt['sticky_mode'] ) {
 			add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		}
+	}
+
+	/**
+	 * 前台脚本与内联配置（enqueue 与 [v8dl_box] 短代码两条路径共用）。
+	 * wbui 为内置 UI 样式库，若其他插件已加载同名资源则复用。
+	 */
+	public static function enqueue_assets( $post_id ) {
+		if ( ! wp_script_is( 'jquery', 'enqueued' ) ) {
+			wp_enqueue_script( 'jquery' );
+		}
+
+		if ( ! wp_style_is( 'wbui-css', 'registered' ) ) {
+			wp_enqueue_style( 'wbui-css', plugin_dir_url( V8DL_BASE_FILE ) . 'assets/wbui/assets/wbui.css', array(), V8DL_VER );
+			wp_enqueue_script( 'wbui-js', plugin_dir_url( V8DL_BASE_FILE ) . 'assets/wbui/wbui.js', array(), V8DL_VER, true );
+		}
+
+		if ( ! wp_script_is( 'v8dl-front', 'enqueued' ) ) {
+			wp_enqueue_script( 'v8dl-front', plugin_dir_url( V8DL_BASE_FILE ) . 'assets/v8dl-front.js', array( 'jquery' ), V8DL_VER, true );
+
+			$config = 'var v8dl_config = ' . wp_json_encode(
+				array(
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'pid'      => (int) $post_id,
+					'dir'      => plugin_dir_url( V8DL_BASE_FILE ),
+					'ver'      => V8DL_VER,
+					'i18n'     => self::js_strings(),
+				)
+			) . ';';
+			wp_add_inline_script( 'v8dl-front', $config, 'before' );
+		}
+	}
+
+	/**
+	 * 前台 JS 文案：随内联配置下发，JS 端按键回退到默认中文。
+	 */
+	private static function js_strings() {
+		return array(
+			'密码' => __( '密码', 'v8-download-box' ),
+			'已复制' => __( '已复制', 'v8-download-box' ),
+			'前往下载页面' => __( '前往下载页面', 'v8-download-box' ),
+			'低版本浏览器需手动复制密码再前往下载页面下载，谢谢' => __( '低版本浏览器需手动复制密码再前往下载页面下载，谢谢', 'v8-download-box' ),
+			'浏览器拦截了跳转，请重试。' => __( '浏览器拦截了跳转，请重试。', 'v8-download-box' ),
+			'去下载' => __( '去下载', 'v8-download-box' ),
+			'下载异常，请联系网站管理员修正下载链接' => __( '下载异常，请联系网站管理员修正下载链接', 'v8-download-box' ),
+			'下载异常，请联系网站管理员' => __( '下载异常，请联系网站管理员', 'v8-download-box' ),
+			'请先登录，谢谢' => __( '请先登录，谢谢', 'v8-download-box' ),
+			'请先留下您的评论，谢谢' => __( '请先留下您的评论，谢谢', 'v8-download-box' ),
+			'下载功能维护中，请稍后再试' => __( '下载功能维护中，请稍后再试', 'v8-download-box' ),
+		);
+	}
+
+	/**
+	 * [v8dl_box] 短代码：在任意内容手动插入下载框。
+	 * pid 缺省取当前文章；title="0" 隐藏标题栏。总开关关闭时输出空。
+	 */
+	public static function shortcode_box( $atts ) {
+		$opt = V8DL_Admin::cnf();
+		if ( empty( $opt['switch'] ) ) {
+			return '';
+		}
+
+		$atts = shortcode_atts(
+			array(
+				'pid' => 0,
+				'title' => 1,
+			),
+			$atts,
+			'v8dl_box'
+		);
+
+		$pid = (int) $atts['pid'];
+		if ( ! $pid ) {
+			$pid = (int) get_the_ID();
+		}
+		if ( ! $pid ) {
+			return '';
+		}
+
+		// 短代码可能出现在未走常规 enqueue 的位置（如页面正文），脚本按需补载。
+		self::enqueue_assets( $pid );
+
+		return self::render_box( $pid, (int) $atts['title'] ? true : false );
 	}
 
 	public static function force_comment_cookies( $comment, $user, $cookies_consent ) {
@@ -322,7 +388,7 @@ class V8DL_Front {
 
 			// 只对已发布的文章提供取链：草稿/待审/私密文章的网盘链接不对外泄露。
 			$post = get_post( $post_id );
-			if ( ! $post || 'publish' !== $post->post_status || 'post' !== $post->post_type ) {
+			if ( ! $post || 'publish' !== $post->post_status || ! in_array( $post->post_type, V8DL_Admin::post_types(), true ) ) {
 				$ret['code'] = 1;
 				break;
 			}
@@ -385,7 +451,7 @@ class V8DL_Front {
 
 	public static function render_widget() {
 		// 组件内容依赖"当前文章"：首页/列表页无明确语境，且页内没有下载框锚点可跳。
-		if ( ! is_singular( 'post' ) ) {
+		if ( ! is_singular( V8DL_Admin::post_types() ) ) {
 			return;
 		}
 
@@ -414,7 +480,7 @@ class V8DL_Front {
 	 * 底部/顶部悬浮下载条（sticky_mode 1 顶部 / 2 底部）。
 	 */
 	public function sticky_bar() {
-		if ( ! is_singular( 'post' ) ) {
+		if ( ! is_singular( V8DL_Admin::post_types() ) ) {
 			return;
 		}
 
@@ -447,8 +513,8 @@ class V8DL_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'v8dl-download-info',
-			'#下载信息#',
-			array( 'description' => '侧栏展示当前文章的下载信息与下载次数' )
+			__( '#下载信息#', 'v8-download-box' ),
+			array( 'description' => __( '侧栏展示当前文章的下载信息与下载次数', 'v8-download-box' ) )
 		);
 	}
 
@@ -460,10 +526,10 @@ class V8DL_Widget extends WP_Widget {
 		$title = isset( $instance['title'] ) ? $instance['title'] : '';
 		?>
 		<p>
-			<label>标题（留空使用默认样式）：</label>
+			<label><?php echo esc_html__( '标题（留空使用默认样式）：', 'v8-download-box' ); ?></label>
 			<input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( $title ); ?>">
 		</p>
-		<p class="description">仅在已开启下载且填写了网盘链接的文章页显示。</p>
+		<p class="description"><?php echo esc_html__( '仅在已开启下载且填写了网盘链接的文章页显示。', 'v8-download-box' ); ?></p>
 		<?php
 	}
 

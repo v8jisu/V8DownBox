@@ -2,9 +2,11 @@
 /**
  * Plugin Name: V8 Download Box
  * Description: 资源下载类博客的下载信息框：本地/百度网盘/蓝奏云/阿里云盘/夸克网盘/天翼云盘/123云盘/城通网盘/磁力/迅雷多通道下载，支持回复后下载；数据兼容同类旧版下载框插件（wb_* 元数据零迁移）。
- * Version:     1.4.2
+ * Version:     1.5.0
  * Author:      v8jisu
  * License:     GPL-2.0-or-later
+ * Text Domain: v8-download-box
+ * Domain Path: /languages
  *
  * 实现说明（参考同类下载框插件的交互重写）：
  *  - 渲染不使用 ob_start（在 the_content 过滤器中调用 ob_start，在页面缓存的
@@ -39,6 +41,10 @@
  * 不再可被枚举读取）；下载计数加服务端 60 秒轻量防刷（同源同文只计一次）；
  * 链接字段保存按协议白名单校验（拒绝 javascript: 等伪协议）。
 
+ * 1.5.0 新增 [v8dl_box] 短代码（在任意内容手动插入下载框，可指定 pid 与是否带标题）；
+ * 生效文章类型可在设置页配置（默认仅 post，取链门禁同步生效）；
+ * 前台/后台字符串接入 i18n（text domain v8-download-box，附 en_US 翻译与 pot 模板）。
+ *
  * 版本策略：日常小修只在本 changelog 记录、不升版本号；功能发布或前端资源
  * （js/css/图标）变更时统一升版本——升级同时用于刷新访客端的资源缓存。
  */
@@ -49,13 +55,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'V8DL_PATH', dirname( __FILE__ ) );
 define( 'V8DL_BASE_FILE', __FILE__ );
-define( 'V8DL_VER', '1.4.2' );
+define( 'V8DL_VER', '1.5.0' );
 
 require_once V8DL_PATH . '/includes/class-v8dl-admin.php';
 require_once V8DL_PATH . '/includes/class-v8dl-front.php';
 
 new V8DL_Admin();
 new V8DL_Front();
+
+add_action( 'init', 'v8dl_load_textdomain' );
+
+/**
+ * 加载翻译文件（languages/ 下 .mo，默认源串为中文，中文站点无需翻译文件）。
+ */
+function v8dl_load_textdomain() {
+	load_plugin_textdomain( 'v8-download-box', false, dirname( plugin_basename( V8DL_BASE_FILE ) ) . '/languages' );
+}
 
 if ( ! function_exists( 'wp_post_meta_download_info' ) ) {
 	/**

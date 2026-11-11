@@ -1,0 +1,277 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: V8 Download Box 1.5.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+
+msgid "#下载信息#"
+msgstr ""
+
+msgid "*该资源需回复评论后下载 "
+msgstr ""
+
+msgid "*该资源需回复评论后下载，马上去"
+msgstr ""
+
+msgid "123云盘"
+msgstr ""
+
+msgid "123云盘下载"
+msgstr ""
+
+msgid "©下载资源版权归作者所有；本站所有资源均来源于网络，仅供学习使用，请支持正版！"
+msgstr ""
+
+msgid "一键暂停全站下载"
+msgstr ""
+
+msgid "上传"
+msgstr ""
+
+msgid "上传文件"
+msgstr ""
+
+msgid "下载"
+msgstr ""
+
+msgid "下载功能"
+msgstr ""
+
+msgid "下载功能维护中，请稍后再试"
+msgstr ""
+
+msgid "下载异常，请联系网站管理员"
+msgstr ""
+
+msgid "下载异常，请联系网站管理员修正下载链接"
+msgstr ""
+
+msgid "下载方式"
+msgstr ""
+
+msgid "下载设置"
+msgstr ""
+
+msgid "仅在已开启下载且填写了网盘链接的文章页显示。"
+msgstr ""
+
+msgid "付费下载（暂不可用）"
+msgstr ""
+
+msgid "低版本浏览器需手动复制密码再前往下载页面下载，谢谢"
+msgstr ""
+
+msgid "例如 https://cloud.189.cn/t/xxxxxx"
+msgstr ""
+
+msgid "例如 https://pan.quark.cn/s/xxxxxxxx"
+msgstr ""
+
+msgid "例如 https://www.123pan.com/s/xxxxxx"
+msgstr ""
+
+msgid "例如 https://www.alipan.com/s/xxxxxx"
+msgstr ""
+
+msgid "例如 https://wwx.lanzouxx.com/xxxxxx"
+msgstr ""
+
+msgid "侧栏下载信息"
+msgstr ""
+
+msgid "侧栏展示当前文章的下载信息与下载次数"
+msgstr ""
+
+msgid "保存设置"
+msgstr ""
+
+msgid "免费下载"
+msgstr ""
+
+msgid "全站生效；单篇文章可在编辑页单独设置\"回复后下载\""
+msgstr ""
+
+msgid "关闭"
+msgstr ""
+
+msgid "分别控制三个前台模块的显示，互不影响；紧急暂停时全部隐藏。"
+msgstr ""
+
+msgid "前往下载页面"
+msgstr ""
+
+msgid "勾选启用下载功能的内容类型（下载框自动追加、取链门禁同步生效），全不选时恢复默认（仅文章）；[v8dl_box] 短代码可用于任何内容。"
+msgstr ""
+
+msgid "去下载"
+msgstr ""
+
+msgid "去评论"
+msgstr ""
+
+msgid "发表评论"
+msgstr ""
+
+msgid "启用下载功能"
+msgstr ""
+
+msgid "吸附底部"
+msgstr ""
+
+msgid "回复后下载"
+msgstr ""
+
+msgid "在文章底部下载框标题栏显示累计下载次数（点击下载后实时 +1）"
+msgstr ""
+
+msgid "在文章底部追加下载信息框"
+msgstr ""
+
+msgid "城通网盘"
+msgstr ""
+
+msgid "城通网盘下载"
+msgstr ""
+
+msgid "填入百度网盘客户端或者网页端分享链接及提取码，可自动识别链接和提取码填入哦。"
+msgstr ""
+
+msgid "天翼云盘"
+msgstr ""
+
+msgid "天翼云盘下载"
+msgstr ""
+
+msgid "夸克网盘"
+msgstr ""
+
+msgid "夸克网盘下载"
+msgstr ""
+
+msgid "密码"
+msgstr ""
+
+msgid "已下载"
+msgstr ""
+
+msgid "已复制"
+msgstr ""
+
+msgid "底部悬浮条"
+msgstr ""
+
+msgid "悬浮下载条"
+msgstr ""
+
+msgid "文件上传方式"
+msgstr ""
+
+msgid "文章底部下载框"
+msgstr ""
+
+msgid "旧数据中若存在\"付费下载\"设置，将按免费下载处理，如需恢复请告知站长。"
+msgstr ""
+
+msgid "显示下载次数"
+msgstr ""
+
+msgid "未登录访客点击下载时提示先登录"
+msgstr ""
+
+msgid "本地直接下载"
+msgstr ""
+
+msgid "标题（留空使用默认样式）："
+msgstr ""
+
+msgid "模块开关"
+msgstr ""
+
+msgid "次"
+msgstr ""
+
+msgid "浏览器拦截了跳转，请重试。"
+msgstr ""
+
+msgid "点击右侧上传按钮或者直接贴入下载链接"
+msgstr ""
+
+msgid "版权说明"
+msgstr ""
+
+msgid "生效文章类型"
+msgstr ""
+
+msgid "留意填写完整url"
+msgstr ""
+
+msgid "留空则显示默认文案。"
+msgstr ""
+
+msgid "登录"
+msgstr ""
+
+msgid "百度网盘"
+msgstr ""
+
+msgid "百度网盘下载"
+msgstr ""
+
+msgid "相关文件下载地址"
+msgstr ""
+
+msgid "磁力链接"
+msgstr ""
+
+msgid "紧急暂停"
+msgstr ""
+
+msgid "网盘密码"
+msgstr ""
+
+msgid "蓝奏云"
+msgstr ""
+
+msgid "蓝奏云下载"
+msgstr ""
+
+msgid "该资源需登录后下载，去"
+msgstr ""
+
+msgid "请先留下您的评论，谢谢"
+msgstr ""
+
+msgid "请先登录，谢谢"
+msgstr ""
+
+msgid "请输入以magnet:开头的磁力链接"
+msgstr ""
+
+msgid "请输入以thunder://开头的迅雷专用下载链接"
+msgstr ""
+
+msgid "迅雷下载"
+msgstr ""
+
+msgid "选择方式"
+msgstr ""
+
+msgid "阿里云盘"
+msgstr ""
+
+msgid "阿里云盘下载"
+msgstr ""
+
+msgid "需回复后下载"
+msgstr ""
+
+msgid "需登录后下载"
+msgstr ""
+
+msgid "页面顶部"
+msgstr ""
+
+msgid "（前台显示“维护中”，AJAX 拒绝取链；文章数据与配置不受影响，取消勾选即恢复）"
+msgstr ""

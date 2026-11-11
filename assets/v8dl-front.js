@@ -9,8 +9,12 @@
         ajax_url: '/wp-admin/admin-ajax.php',
         pid: 0,
         dir: '',
-        ver: '1'
+        ver: '1',
+        i18n: {}
     };
+
+    var I18N = cfg.i18n || {};
+    function t(s) { return I18N[s] || s; }
 
     function copyText(text) {
         var el = document.createElement('textarea');
@@ -36,20 +40,20 @@
         return '<div class="wbdl-main" id="J_ppoDownloadDLIPP">'
             + '<div class="dl-info">'
             + '<svg class="wb-icon wbsico-dlipp-confirm"><use xlink:href="#wbsico-dlipp-confirm"></use></svg>'
-            + '<span>密码</span> <b class="dl-psw">' + escHtml(pwd) + '</b> <span>已复制</span>'
+            + '<span>' + t('密码') + '</span> <b class="dl-psw">' + escHtml(pwd) + '</b> <span>' + t('已复制') + '</span>'
             + '</div>'
             + '<a class="wb-btn wb-btn-outlined wb-btn-download j-copy-psw" href="' + escHtml(url) + '" data-clipboard-text="' + escHtml(pwd) + '" target="_blank" rel="nofollow">'
             + '<svg class="wb-icon-dlipp wbsico-dlipp-download"><use xlink:href="#wbsico-dlipp-download"></use></svg>'
-            + '<span>前往下载页面</span></a>'
+            + '<span>' + t('前往下载页面') + '</span></a>'
             + '</div>'
-            + '<div class="info-for-sp"><span>低版本浏览器需手动复制密码再前往下载页面下载，谢谢</span></div>';
+            + '<div class="info-for-sp"><span>' + t('低版本浏览器需手动复制密码再前往下载页面下载，谢谢') + '</span></div>';
     }
 
     function blockedDialog(url) {
-        return '<div class="dl-info">浏览器拦截了跳转，请重试。<br><br>'
+        return '<div class="dl-info">' + t('浏览器拦截了跳转，请重试。') + '<br><br>'
             + '<a class="wb-btn wb-btn-outlined wb-btn-download" href="' + escHtml(url) + '" target="_blank" rel="nofollow">'
             + '<svg class="wb-icon-dlipp wbsico-dlipp-download"><use xlink:href="#wbsico-dlipp-download"></use></svg>'
-            + '<span>去下载</span></a></div>';
+            + '<span>' + t('去下载') + '</span></a></div>';
     }
 
     $(function () {
@@ -70,7 +74,7 @@
 
             $.post(cfg.ajax_url, {
                 action: 'v8dl_front',
-                pid: cfg.pid || 0,
+                pid: $btn.data('pid') || cfg.pid || 0,
                 rid: $btn.data('rid')
             }, function (r) {
                 if (!r) { return; }
@@ -79,7 +83,7 @@
                         var url = r.data.url;
                         var pwd = r.data.pwd || '';
                         if (!url) {
-                            wbui.alert('下载异常，请联系网站管理员修正下载链接');
+                            wbui.alert(t('下载异常，请联系网站管理员修正下载链接'));
                             break;
                         }
                         $btn.data('dl-url', url);
@@ -95,19 +99,19 @@
                         }
                         break;
                     case 1:
-                        wbui.alert('下载异常，请联系网站管理员');
+                        wbui.alert(t('下载异常，请联系网站管理员'));
                         break;
                     case 2:
-                        wbui.alert('请先登录，谢谢');
+                        wbui.alert(t('请先登录，谢谢'));
                         break;
                     case 3:
-                        wbui.toast('请先留下您的评论，谢谢');
+                        wbui.toast(t('请先留下您的评论，谢谢'));
                         break;
                     case 4:
-                        wbui.toast('下载功能维护中，请稍后再试');
+                        wbui.toast(t('下载功能维护中，请稍后再试'));
                         break;
                     default:
-                        wbui.alert('下载异常，请联系网站管理员');
+                        wbui.alert(t('下载异常，请联系网站管理员'));
                 }
             }, 'json');
 

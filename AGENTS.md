@@ -19,7 +19,8 @@ v8jisu-download-box/
 │   ├── class-v8dl-admin.php       # 后台：设置页 + 文章元数据面板 + 保存/sanitize
 │   └── class-v8dl-front.php       # 前台：下载框 / AJAX 取链 / 悬浮条 / widget / 评论校验
 ├── templates/                     # box.php 下载框 / widget.php 侧栏 / sticky.php 悬浮条 / meta-box.php 编辑面板
-└── assets/                        # v8dl-front.js 前台脚本 / wbui 内置 UI 库 / SVG 图标 sprite
+├── assets/                        # v8dl-front.js 前台脚本 / wbui 内置 UI 库 / SVG 图标 sprite
+└── languages/                     # v8-download-box.pot / en_US 翻译
 ```
 
 ## 铁律（违反会出事故）
@@ -53,6 +54,11 @@ v8jisu-download-box/
   相对路径保留），防止 `javascript:` 伪协议入库后被前台原样输出。
 - **SVG sprite 注入前有 safeSvg 形态校验**：localStorage 可被同源 XSS 篡改，
   校验拦 `<script>` / `javascript:` / `on*=`，防借道持久化。
+- **生效文章类型默认仅 post**：设置页可勾选；AJAX 门禁与前台 is_singular 挂载
+  统一走 `V8DL_Admin::post_types()`，调整默认值时须同步评估取链门禁暴露面。
+- **i18n 约定**：用户可见字符串一律包 `v8-download-box` text domain（默认源串为中文）；
+  JS 文案经 `v8dl_config.i18n` 下发（键=中文源串）；新增字符串必须同步补 en_US 表
+  与 pot（生成脚本见发布流程）。
 - **旧版「付费下载」`wb_dl_mode=2` 是兼容值**：一律按免费处理，勿恢复其逻辑。
 
 ## 版本与发布

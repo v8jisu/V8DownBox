@@ -1,0 +1,277 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: V8 Download Box 1.5.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+
+msgid "#下载信息#"
+msgstr "#Download Info#"
+
+msgid "*该资源需回复评论后下载 "
+msgstr "*This resource requires a comment to download "
+
+msgid "*该资源需回复评论后下载，马上去"
+msgstr "*This resource requires a comment to download. Go to "
+
+msgid "123云盘"
+msgstr "123 Cloud Drive"
+
+msgid "123云盘下载"
+msgstr "123 Cloud Drive"
+
+msgid "©下载资源版权归作者所有；本站所有资源均来源于网络，仅供学习使用，请支持正版！"
+msgstr "© All download resources belong to their authors; resources on this site are collected from the internet for study only. Please support the official releases!"
+
+msgid "一键暂停全站下载"
+msgstr "Pause all downloads site-wide"
+
+msgid "上传"
+msgstr "Upload"
+
+msgid "上传文件"
+msgstr "Upload file"
+
+msgid "下载"
+msgstr "Download"
+
+msgid "下载功能"
+msgstr "Download feature"
+
+msgid "下载功能维护中，请稍后再试"
+msgstr "Downloads are under maintenance, please try again later"
+
+msgid "下载异常，请联系网站管理员"
+msgstr "Download error, please contact the site administrator"
+
+msgid "下载异常，请联系网站管理员修正下载链接"
+msgstr "Download error: please ask the site administrator to fix the download link"
+
+msgid "下载方式"
+msgstr "Access mode"
+
+msgid "下载设置"
+msgstr "Download settings"
+
+msgid "仅在已开启下载且填写了网盘链接的文章页显示。"
+msgstr "Shown only on posts with downloads enabled and at least one link filled in."
+
+msgid "付费下载（暂不可用）"
+msgstr "Paid download (currently unavailable)"
+
+msgid "低版本浏览器需手动复制密码再前往下载页面下载，谢谢"
+msgstr "Older browsers need to copy the code manually before visiting the download page. Thanks!"
+
+msgid "例如 https://cloud.189.cn/t/xxxxxx"
+msgstr "e.g. https://cloud.189.cn/t/xxxxxx"
+
+msgid "例如 https://pan.quark.cn/s/xxxxxxxx"
+msgstr "e.g. https://pan.quark.cn/s/xxxxxxxx"
+
+msgid "例如 https://www.123pan.com/s/xxxxxx"
+msgstr "e.g. https://www.123pan.com/s/xxxxxx"
+
+msgid "例如 https://www.alipan.com/s/xxxxxx"
+msgstr "e.g. https://www.alipan.com/s/xxxxxx"
+
+msgid "例如 https://wwx.lanzouxx.com/xxxxxx"
+msgstr "e.g. https://wwx.lanzouxx.com/xxxxxx"
+
+msgid "侧栏下载信息"
+msgstr "Sidebar download info widget"
+
+msgid "侧栏展示当前文章的下载信息与下载次数"
+msgstr "Show the current post download info and count in the sidebar"
+
+msgid "保存设置"
+msgstr "Save changes"
+
+msgid "免费下载"
+msgstr "Free download"
+
+msgid "全站生效；单篇文章可在编辑页单独设置\"回复后下载\""
+msgstr "Applies site-wide; a single post can override it with its own \"comment required\" setting"
+
+msgid "关闭"
+msgstr "Disabled"
+
+msgid "分别控制三个前台模块的显示，互不影响；紧急暂停时全部隐藏。"
+msgstr "Controls the three front-end modules independently; all are hidden during an emergency pause."
+
+msgid "前往下载页面"
+msgstr "Go to the download page"
+
+msgid "勾选启用下载功能的内容类型（下载框自动追加、取链门禁同步生效），全不选时恢复默认（仅文章）；[v8dl_box] 短代码可用于任何内容。"
+msgstr "Content types where the download feature is active (auto-append and the AJAX gate both follow this). Unchecking everything falls back to the default (posts only). The [v8dl_box] shortcode works anywhere."
+
+msgid "去下载"
+msgstr "Go to download"
+
+msgid "去评论"
+msgstr "comment"
+
+msgid "发表评论"
+msgstr "post a comment"
+
+msgid "启用下载功能"
+msgstr "Enable downloads"
+
+msgid "吸附底部"
+msgstr "Stick to bottom"
+
+msgid "回复后下载"
+msgstr "Comment to download"
+
+msgid "在文章底部下载框标题栏显示累计下载次数（点击下载后实时 +1）"
+msgstr "Show the total download count in the box header (increments on each download)"
+
+msgid "在文章底部追加下载信息框"
+msgstr "Append the download info box to post content"
+
+msgid "城通网盘"
+msgstr "Chengtong Cloud Drive"
+
+msgid "城通网盘下载"
+msgstr "Chengtong Cloud Drive"
+
+msgid "填入百度网盘客户端或者网页端分享链接及提取码，可自动识别链接和提取码填入哦。"
+msgstr "Paste a Baidu Netdisk share link and extraction code — the link and code are recognized and filled in automatically."
+
+msgid "天翼云盘"
+msgstr "Tianyi Cloud Drive"
+
+msgid "天翼云盘下载"
+msgstr "Tianyi Cloud Drive"
+
+msgid "夸克网盘"
+msgstr "Quark Drive"
+
+msgid "夸克网盘下载"
+msgstr "Quark Drive"
+
+msgid "密码"
+msgstr "Password"
+
+msgid "已下载"
+msgstr "Downloaded"
+
+msgid "已复制"
+msgstr "copied"
+
+msgid "底部悬浮条"
+msgstr "Sticky bar position"
+
+msgid "悬浮下载条"
+msgstr "Sticky download bar"
+
+msgid "文件上传方式"
+msgstr "File source"
+
+msgid "文章底部下载框"
+msgstr "Post bottom download box"
+
+msgid "旧数据中若存在\"付费下载\"设置，将按免费下载处理，如需恢复请告知站长。"
+msgstr "If legacy data contains a \"paid download\" setting, it is treated as a free download."
+
+msgid "显示下载次数"
+msgstr "Show download count"
+
+msgid "未登录访客点击下载时提示先登录"
+msgstr "Ask guests to log in before downloading"
+
+msgid "本地直接下载"
+msgstr "Local file download"
+
+msgid "标题（留空使用默认样式）："
+msgstr "Title (leave empty to use the default style):"
+
+msgid "模块开关"
+msgstr "Module switches"
+
+msgid "次"
+msgstr "times"
+
+msgid "浏览器拦截了跳转，请重试。"
+msgstr "The browser blocked the redirect, please try again."
+
+msgid "点击右侧上传按钮或者直接贴入下载链接"
+msgstr "Click the upload button on the right or paste a download link directly"
+
+msgid "版权说明"
+msgstr "Copyright note"
+
+msgid "生效文章类型"
+msgstr "Post types"
+
+msgid "留意填写完整url"
+msgstr "Make sure to enter the full URL"
+
+msgid "留空则显示默认文案。"
+msgstr "Leave empty to use the default note."
+
+msgid "登录"
+msgstr "Log in"
+
+msgid "百度网盘"
+msgstr "Baidu Netdisk"
+
+msgid "百度网盘下载"
+msgstr "Baidu Netdisk"
+
+msgid "相关文件下载地址"
+msgstr "Download links"
+
+msgid "磁力链接"
+msgstr "Magnet link"
+
+msgid "紧急暂停"
+msgstr "Emergency pause"
+
+msgid "网盘密码"
+msgstr "Extraction code"
+
+msgid "蓝奏云"
+msgstr "Lanzou Cloud"
+
+msgid "蓝奏云下载"
+msgstr "Lanzou Cloud"
+
+msgid "该资源需登录后下载，去"
+msgstr "This resource requires login to download. Go to "
+
+msgid "请先留下您的评论，谢谢"
+msgstr "Please leave a comment first, thank you"
+
+msgid "请先登录，谢谢"
+msgstr "Please log in first, thank you"
+
+msgid "请输入以magnet:开头的磁力链接"
+msgstr "Enter a magnet link starting with magnet:"
+
+msgid "请输入以thunder://开头的迅雷专用下载链接"
+msgstr "Enter a Thunder link starting with thunder://"
+
+msgid "迅雷下载"
+msgstr "Thunder download"
+
+msgid "选择方式"
+msgstr "Mode"
+
+msgid "阿里云盘"
+msgstr "Aliyun Drive (Alipan)"
+
+msgid "阿里云盘下载"
+msgstr "Aliyun Drive (Alipan)"
+
+msgid "需回复后下载"
+msgstr "Comment required to download"
+
+msgid "需登录后下载"
+msgstr "Login required to download"
+
+msgid "页面顶部"
+msgstr "Top of page"
+
+msgid "（前台显示“维护中”，AJAX 拒绝取链；文章数据与配置不受影响，取消勾选即恢复）"
+msgstr "(front end shows a maintenance notice and AJAX refuses to serve links; post data and settings are untouched — uncheck to resume)"

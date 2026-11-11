@@ -13,15 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 $html = '';
 
 $html .= '<section class="widget widget-wbdl" id="J_widgetWBDownload">';
-$html .= '<h3 class="widgettitle">下载</h3>';
+$html .= '<h3 class="widgettitle">' . esc_html__( '下载', 'v8-download-box' ) . '</h3>';
 $html .= '<div class="widget-main">';
 
 if ( $need_login && ! $is_login ) {
-	$html .= '<a href="' . esc_url( wp_login_url( get_permalink() ) ) . '"><svg class="wb-icon-dlipp wbsico-dlipp-download"><use xlink:href="#wbsico-dlipp-download"></use></svg> <span>去下载</span></a>';
+	$html .= '<a href="' . esc_url( wp_login_url( get_permalink() ) ) . '"><svg class="wb-icon-dlipp wbsico-dlipp-download"><use xlink:href="#wbsico-dlipp-download"></use></svg> <span>' . esc_html__( '去下载', 'v8-download-box' ) . '</span></a>';
 } elseif ( $need_comment && ! $is_comment ) {
-	$html .= '<p class="wb-tips">*该资源需回复评论后下载 <a href="#comments">去评论</a></p>';
+	$html .= '<p class="wb-tips">' . esc_html__( '*该资源需回复评论后下载 ', 'v8-download-box' ) . '<a href="#comments">' . esc_html__( '去评论', 'v8-download-box' ) . '</a></p>';
 } else {
-	$html .= '<a class="wb-btn wb-btn-outlined wb-btn-download" href="#J_DLIPPCont"><svg class="wb-icon-dlipp wbsico-dlipp-download"><use xlink:href="#wbsico-dlipp-download"></use></svg> <span>去下载</span></a>';
+	$html .= '<a class="wb-btn wb-btn-outlined wb-btn-download" href="#J_DLIPPCont"><svg class="wb-icon-dlipp wbsico-dlipp-download"><use xlink:href="#wbsico-dlipp-download"></use></svg> <span>' . esc_html__( '去下载', 'v8-download-box' ) . '</span></a>';
 }
 
 $html .= '</div>';

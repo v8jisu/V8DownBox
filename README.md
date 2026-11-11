@@ -1,7 +1,7 @@
 # V8 Download Box
 
 ![License](https://img.shields.io/badge/License-GPL--2.0--or--later-blue)
-![Version](https://img.shields.io/badge/Version-1.4.2-green)
+![Version](https://img.shields.io/badge/Version-1.5.0-green)
 ![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-21759B)
 ![PHP](https://img.shields.io/badge/PHP-7.0%2B-777BB4)
 
@@ -18,6 +18,8 @@ comment-gated downloads, anti-refresh counter, sticky bar & sidebar widget.
 - **下载次数统计**：点击下载实时 +1、防刷新；计数显示在下载框标题栏
 - **三个前台模块独立开关**：文章底部下载框 / 底部悬浮条 / 侧栏下载信息 widget
 - **紧急暂停**：一键暂停全站下载（前台提示"维护中"，文章数据与配置不受影响）
+- **短代码与文章类型**：`[v8dl_box]` 短代码可在任意内容手动插入下载框；生效文章类型可在设置页配置（默认仅文章）
+- **i18n**：前台/后台字符串接入翻译（text domain `v8-download-box`，自带 en_US 翻译与 pot 模板）
 - **旧插件兼容**：`wp_post_meta_download_info()` 全局函数与 `wb_dlip_html` 过滤器沿用旧签名
 
 ## 环境要求
@@ -65,12 +67,25 @@ git clone https://github.com/v8jisu/V8DownBox.git v8jisu-download-box
 | 需回复后下载 | 全站生效；单篇文章可在编辑页单独设置"回复后下载" |
 | 显示下载次数 | 在下载框标题栏显示累计下载次数（点击后实时 +1） |
 | 底部悬浮条 | 关闭 / 页面顶部 / 吸附底部 |
+| 生效文章类型 | 勾选启用下载的内容类型（默认仅文章），取链门禁同步生效 |
 | 版权说明 | 下载框内展示的说明文案，留空显示默认 |
 
 ### 文章下载信息（编辑页「下载设置」面板）
 
 勾选"启用下载" → 填写各通道链接（百度网盘可另填提取码）→ 选择免费或"回复后下载"。
 **未填写任何链接的文章不会渲染任何下载模块**（下载框/侧栏/悬浮条统一判定）。
+
+### 短代码（手动插入下载框）
+
+在任意文章/页面内容里插入：
+
+```
+[v8dl_box]
+[v8dl_box pid="123" title="0"]
+```
+
+`pid` 缺省为当前文章；`title="0"` 隐藏标题栏。总开关或紧急暂停开启时不输出。
+注意：已开启「文章底部下载框」的文章里再插短代码会出现两个框，按需选择其一。
 
 ### 通道与元数据键
 
@@ -149,6 +164,7 @@ v8jisu-download-box/
 
 ## 版本历史（摘要，详见主文件头注释）
 
+- **1.5.0** [v8dl_box] 短代码、生效文章类型可配置、i18n（en_US 翻译 + pot 模板）
 - **1.4.2** 安全加固：AJAX 校验文章发布状态、计数 60 秒防刷、链接协议白名单
 - **1.4.1** 无任何链接的文章不渲染任何下载模块；侧栏组件仅在文章页显示
 - **1.4.0** 下载次数移至下载框标题栏（点击实时 +1），侧栏不再重复展示

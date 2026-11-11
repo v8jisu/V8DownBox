@@ -20,7 +20,7 @@ $html .= '<div class="wbsb-inner pw">';
 $html .= '<div class="sb-title">' . esc_html( get_the_title() ) . '</div>';
 $html .= '<div class="ctrl-box">';
 $html .= '<a class="wb-btn wb-btn-outlined wb-btn-download" href="#J_DLIPPCont">';
-$html .= '<svg class="wb-icon-dlipp wbsico-dlipp-download"><use xlink:href="#wbsico-dlipp-download"></use></svg> <span>去下载</span>';
+$html .= '<svg class="wb-icon-dlipp wbsico-dlipp-download"><use xlink:href="#wbsico-dlipp-download"></use></svg> <span>' . esc_html__( '去下载', 'v8-download-box' ) . '</span>';
 $html .= '</a>';
 $html .= '</div>';
 $html .= '</div>';
